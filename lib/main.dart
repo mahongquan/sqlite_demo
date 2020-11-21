@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:sqlite_demo/ClientModel.dart';
-import 'package:sqlite_demo/Database.dart';
+import 'ClientModel.dart';
+import 'Database.dart';
 import 'dart:math' as math;
-
 void main() => runApp(MaterialApp(home: MyApp()));
 
 class MyApp extends StatefulWidget {

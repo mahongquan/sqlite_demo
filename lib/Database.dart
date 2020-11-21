@@ -4,7 +4,8 @@ import 'dart:io';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqlite_demo/ClientModel.dart';
-import 'package:sqflite/sqflite.dart';
+import 'package:sqflite_common/sqlite_api.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 class DBProvider {
   DBProvider._();
@@ -21,17 +22,10 @@ class DBProvider {
   }
 
   initDB() async {
+    sqfliteFfiInit();
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    String path = join(documentsDirectory.path, "TestDB.db");
-    return await openDatabase(path, version: 1, onOpen: (db) {},
-        onCreate: (Database db, int version) async {
-      await db.execute("CREATE TABLE Client ("
-          "id INTEGER PRIMARY KEY,"
-          "first_name TEXT,"
-          "last_name TEXT,"
-          "blocked BIT"
-          ")");
-    });
+    String path = join(documentsDirectory.path, "data.sqlite");
+    return await databaseFactoryFfi.openDatabase(path);
   }
 
   newClient(Client newClient) async {
@@ -43,7 +37,7 @@ class DBProvider {
     var raw = await db.rawInsert(
         "INSERT Into Client (id,first_name,last_name,blocked)"
         " VALUES (?,?,?,?)",
-        [id, newClient.firstName, newClient.lastName, newClient.blocked]);
+        [id, newClient.firstName, newClient.lastName, newClient.blocked?1:0]);
     return raw;
   }
 
@@ -102,3 +96,4 @@ class DBProvider {
     db.rawDelete("Delete * from Client");
   }
 }
+//([id] integer PRIMARY KEY NOT NULL, [bh] varchar (30), [name] varchar (30) NOT NULL, [guige] varchar (30), [ct] integer NOT NULL, [danwei] varchar (30) NOT NULL, [image] VARCHAR (100), [name_en] CHAR (30), [beizhu] CHAR (30))

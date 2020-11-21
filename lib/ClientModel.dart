@@ -34,6 +34,6 @@ class Client {
         "id": id,
         "first_name": firstName,
         "last_name": lastName,
-        "blocked": blocked,
+        "blocked": blocked?1:0,
       };
 }
